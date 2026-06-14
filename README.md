@@ -1,29 +1,129 @@
 # Good B-roll Skill
 
-Turn short-video scripts, narration, and storyboard notes into usable B-roll image prompts.
+一个给短视频口播、旁白、分镜和脚本生成 **B-roll 配图提示词** 的 Agent Skill。
 
-This skill helps an AI agent extract the core idea of a script, choose a visual metaphor, select a style, and output image-generation prompts that can be copied into common image models.
+它的核心作用是：把文案里抽象的观点、流程、情绪和对比，拆成可以被图像模型生成的画面。比如人物、道具、屏幕界面、流程卡片、隐喻元素、镜头构图和视觉风格。
 
-![Good B-roll showcase](assets/showcase/good-broll-showcase.png)
+![Good B-roll 风格展示](assets/showcase/good-broll-showcase.png)
 
-## What It Does
+## 适合谁
 
-- Extracts the key concept, audience, action, and visual metaphor from a script.
-- Supports five reusable visual styles:
-  - Editorial Collage
-  - Warm Hand-drawn Illustration
-  - Playful 3D Cartoon
-  - Whiteboard Doodle
-  - Warm Sketch Explainer
-- Produces practical prompts for B-roll, short-video cover images, explainer scenes, and storyboard assets.
+- 做小红书、视频号、B站、抖音等短视频内容的创作者
+- 需要给口播视频快速配图、配封面、配分镜的人
+- 做 AI 工具教学、效率工具讲解、产品功能演示的博主
+- 想让 Agent 根据文案直接产出可复制图像提示词的人
 
-## Skill Structure
+## 这个 Skill 能做什么
+
+- 从视频文案中提取核心概念、受众、动作和信息关系
+- 把抽象表达转成具体画面元素，例如“效率提升”转成 before/after 对比，“工作流”转成模块连接图
+- 根据内容选择合适的视觉风格
+- 输出可直接复制到图像生成模型里的完整提示词
+- 支持单张配图、分镜配图、短视频封面、解释型插图和 B-roll 素材方向
+
+## 内置 5 种风格
+
+### 1. 社媒拼贴插画风
+
+适合 AI 工具教程、效率对比、轻松科普、社媒风封面。
+
+关键词：剪纸拼贴、胶带、纸片层次、年轻、轻松、清新配色。
+
+### 2. 温暖手绘插画风
+
+适合经验分享、教育型内容、温和教程。
+
+关键词：手绘线条、纸张质感、亲切、有人情味、适合讲学习和成长。
+
+### 3. 卡通 3D 风
+
+适合活泼工具讲解、轻量娱乐化内容、可爱视觉表达。
+
+关键词：圆润 3D、柔和渐变、玩具感、按钮、模块、角色和道具。
+
+### 4. 白板涂鸦讲解风
+
+适合拆步骤、讲逻辑、解释概念。
+
+关键词：白板、手写标注、箭头、荧光笔、高亮、老师现场讲解感。
+
+### 5. 暖纸黑线产品草图风
+
+适合 AI 工作流、SaaS 产品概念、工具链路、抽象流程解释。
+
+关键词：暖米色纸张、粗黑马克笔线条、白色信息卡片、极简、lo-fi SaaS explainer。
+
+## 使用示例
+
+输入：
+
+```text
+帮我给这段视频文案配图：
+以前我做一个工具要写很多代码，现在我可以用 AI 编程工具 10 分钟搭好一个工作流。
+```
+
+Skill 会先分析：
+
+```text
+核心概念：AI 编程工具让工作流搭建变快
+视觉关系：过去复杂编码 vs 现在快速搭建
+适合风格：社媒拼贴插画风 / 暖纸黑线产品草图风
+画面方向：before/after 对比，左边代码压力，右边模块化工作流
+```
+
+然后输出类似这样的图像提示词：
+
+```text
+【社媒拼贴插画风】
+
+背景是米白色纯色纸张，画面是轻松的拼贴插画风格，所有元素像剪纸剪下来的纸片。
+
+左侧是过去的工作方式：一个扁平剪纸风格的人物坐在电脑前，屏幕里是复杂代码、终端窗口和密密麻麻的符号，人物表情专注但有压力。
+
+右侧是现在的工作方式：同一个人物轻松地拖拽几个彩色功能模块，模块之间用虚线箭头连接，形成一个简单清晰的 AI 工作流。
+
+中间有一个从左到右的箭头，表示从“写很多代码”到“10 分钟搭好工作流”的转变。
+
+周围有少量代码符号、闪电、星星和齿轮剪纸装饰。整体风格年轻、轻松、清新，蓝色、紫色、橙色为主，适合短视频 B-roll 配图。
+
+--ar 3:4
+```
+
+## 安装到 Claude
+
+把整个目录放到 Claude skills 目录下：
+
+```bash
+~/.claude/skills/good-broll
+```
+
+目录里必须保留 `SKILL.md`：
 
 ```text
 good-broll/
 ├── SKILL.md
-├── LICENSE
-├── README.md
+├── references/
+│   └── style_templates.md
+└── ...
+```
+
+## 给 Codex 做热链接加载
+
+如果你希望 Claude 和 Codex 共用同一份 skill，可以在 Codex skills 目录下创建软链接：
+
+```bash
+ln -s ~/.claude/skills/good-broll ~/.codex/skills/good-broll
+```
+
+这样以后只需要维护 Claude 目录里的源文件，Codex 会读取同一份内容。
+
+## 目录结构
+
+```text
+good-broll/
+├── SKILL.md                      # Skill 主说明，Agent 触发后会读取
+├── README.md                     # 开源说明
+├── LICENSE                       # MIT License
 ├── assets/
 │   └── showcase/
 │       ├── editorial-collage.png
@@ -33,27 +133,32 @@ good-broll/
 │       ├── warm-sketch-explainer.png
 │       └── good-broll-showcase.png
 ├── references/
-│   └── style_templates.md
+│   └── style_templates.md        # 5 种风格的详细提示词模板
 └── scripts/
-    └── generate_showcase.py
+    └── generate_showcase.py      # 本地生成展示图脚本
 ```
 
-## Example Prompt
+## 重新生成展示图
 
-```text
-帮我给这段视频文案配图：
-"以前我做一个工具要写很多代码，现在我可以用 AI 编程工具 10 分钟搭好一个工作流。"
-```
-
-The skill will analyze the script and generate B-roll prompt options in the selected style.
-
-## Regenerate Showcase Images
+展示图是用本地 Pillow 脚本生成的，用来展示 5 个风格方向，不依赖外部图像生成 API。
 
 ```bash
 python3 scripts/generate_showcase.py
 ```
 
-The showcase images are deterministic local illustrations generated with Pillow. They are meant as open-source visual examples of the five style directions.
+生成结果会写入：
+
+```text
+assets/showcase/
+```
+
+## 设计原则
+
+- 不强制绑定固定人物，人物、道具、UI、抽象图形都可以成为视觉主体
+- 先理解文案，再设计画面，而不是套模板
+- 画面必须服务文案，避免无意义装饰
+- 风格描述要稳定，方便反复生成相近视觉语言
+- 输出提示词要能直接复制使用，不只给抽象建议
 
 ## License
 
